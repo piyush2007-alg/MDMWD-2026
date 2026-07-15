@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>S.B. Jain Institute: Enrollment Form</title>
+</head>
+
+<body>
+
+    <!-- Header Section -->
+    <table border="5" width="100%" cellpadding="20">
+        <tr>
+            <td align="center">
+                <h1>S.B. Jain Institute: ENROLLMENT FORM</h1>
+            </td>
+        </tr>
+    </table>
+
+    <hr>
+
+    <!-- Main Enrollment Form -->
+    <form action="#" method="POST" enctype="multipart/form-data">
+
+        <!-- Two Column Layout Table -->
+        <table border="2" width="100%" cellpadding="10" cellspacing="0">
+            <tr>
+                <!-- LEFT COLUMN -->
+                <td width="50%" valign="top">
+
+                    <!-- Student Profile Section -->
+                    <fieldset>
+                        <legend><strong>Student Profile</strong></legend>
+                        <table border="0" width="100%" cellpadding="5">
+                            <tr>
+                                <td width="50%">
+                                    <label for="first_name">Legal First Name</label><br>
+                                    <input type="text" id="first_name" name="first_name"
+                                        placeholder="Enter Your First Name" required>
+                                </td>
+                                <td width="50%">
+                                    <label for="last_name">Legal Last Name</label><br>
+                                    <input type="text" id="last_name" name="last_name"
+                                        placeholder="Enter Your Last Name" required>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="email">Primary Email Address</label><br>
+                                    <input type="email" id="email" name="email" placeholder="Enter Your Email Address"
+                                        required>
+                                </td>
+                                <td>
+                                    <label for="phone">Contact Phone</label><br>
+                                    <input type="number" id="phone" name="phone" placeholder="Enter Your Phone Number"
+                                        required>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <label for="website">Personal Website/Portfolio URL - if applicable</label><br>
+                                    <input type="url" id="website" name="website"
+                                        placeholder="Enter Your Personal Website/Portfolio URL" size="50">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <br>
+                                    <strong>Citizenship Status:</strong><br>
+                                    <input type="radio" id="citizen_indian" name="citizenship" value="Indian" checked>
+                                    <label for="citizen_indian">Indian</label>
+
+                                    <input type="radio" id="citizen_pr" name="citizenship" value="Permanent Resident">
+                                    <label for="citizen_pr">Permanent Resident</label>
+
+                                    <input type="radio" id="citizen_oci" name="citizenship"
+                                        value="Overseas Citizen of India">
+                                    <label for="citizen_oci">Overseas Citizen of India (OCI)</label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <br>
+                                    <strong>Preferred Pronouns:</strong><br>
+                                    <input type="checkbox" id="pronoun_he" name="pronouns" value="He/Him">
+                                    <label for="pronoun_he">He/Him</label>
+
+                                    <input type="checkbox" id="pronoun_she" name="pronouns" value="She/Her" checked>
+                                    <label for="pronoun_she">She/Her</label>
+
+                                    <input type="checkbox" id="pronoun_they" name="pronouns" value="They/Them">
+                                    <label for="pronoun_they">They/Them</label>
+
+                                    <input type="checkbox" id="pronoun_other" name="pronouns" value="Other">
+                                    <label for="pronoun_other">Other</label>
+                                </td>
+                            </tr>
+                        </table>
+                    </fieldset>
+
+                    <br>
+
+                    <!-- Contact Details & Guardian Section -->
+                    <fieldset>
+                        <legend><strong>Contact Details & Guardian</strong></legend>
+                        <table border="0" width="100%" cellpadding="5">
+                            <tr>
+                                <td width="60%">
+                                    <label for="address">Permanent Residence Address</label><br>
+                                    <textarea id="address" name="address" rows="4" cols="35"
+                                        placeholder="House No. 42, Gali No. 3, Near Ganesh Temple, Malviya Nagar, New Delhi - 110017"
+                                        required></textarea>
+                                </td>
+                                <td width="40%" valign="top">
+                                    <label for="city">Town/City</label><br>
+                                    <input type="text" id="city" name="city" placeholder="New Delhi" required>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="state">State/Region</label><br>
+                                    <select id="state" name="state" size="4" required>
+                                        <option value="Delhi" selected>Delhi</option>
+                                        <option value="Maharashtra">Maharashtra</option>
+                                        <option value="Karnataka">Karnataka</option>
+                                        <option value="Jammu & Kashmir">Jammu & Kashmir</option>
+                                    </select>
+                                </td>
+                                <td align="top">
+                                    <label for="postal_code">Postal Code</label><br>
+                                    <input type="text" id="postal_code" name="postal_code" placeholder="110017"
+                                        required>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <input type="checkbox" id="diff_address" name="diff_address">
+                                    <label for="diff_address">Is this address different from your mailing
+                                        address?</label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="guardian_name">Guardian Name</label><br>
+                                    <input type="text" id="guardian_name" name="guardian_name"
+                                        placeholder="Enter Your Guardian's Name" required>
+                                </td>
+                                <td>
+                                    <label for="relationship">Relationship</label><br>
+                                    <select id="relationship" name="relationship" required>
+                                        <option value="Father" selected>Father</option>
+                                        <option value="Mother">Mother</option>
+                                        <option value="Guardian">Guardian</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </table>
+                    </fieldset>
+
+                </td>
+
+                <!-- RIGHT COLUMN -->
+                <td width="50%" valign="top">
+
+                    <!-- Academic Information & Selection Section -->
+                    <fieldset>
+                        <legend><strong>Academic Information & Selection</strong></legend>
+                        <table border="0" width="100%" cellpadding="5">
+                            <tr>
+                                <td width="50%">
+                                    <label for="major">Major/Field of Interest</label><br>
+                                    <select id="major" name="major" size="3" required>
+                                        <option value="" selected>Bio-Engineering</option>
+                                        <option value="Digital Media">Digital Media</option>
+                                        <option value="Indian Studies">Indian Studies</option>
+                                    </select>
+                                </td>
+                                <td width="50%" valign="top">
+                                    <strong>Desired Start Term:</strong><br>
+                                    <input type="radio" id="term_autumn" name="start_term" value="Autumn 2024" checked>
+                                    <label for="term_autumn">Autumn 2025</label><br>
+
+                                    <input type="radio" id="term_winter" name="start_term" value="Winter 2025">
+                                    <label for="term_winter">Winter 2026</label><br>
+
+                                    <input type="radio" id="term_spring" name="start_term" value="Spring 2025">
+                                    <label for="term_spring">Spring 2026</label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="gpa">Last GPA / Percentage</label><br>
+                                    <input type="text" id="gpa" name="gpa" placeholder="88%" required>
+                                </td>
+                                <td>
+                                    <label for="transcript">Upload Transcript (PDF)</label><br>
+                                    <input type="file" id="transcript" name="transcript" accept=".pdf" required>
+                                </td>
+                            </tr>
+                        </table>
+                    </fieldset>
+
+                    <br>
+
+                    <!-- Additional Questions & Activities Section -->
+                    <fieldset>
+                        <legend><strong>Additional Questions & Activities</strong></legend>
+                        <table border="0" width="100%" cellpadding="5">
+                            <tr>
+                                <td colspan="2">
+                                    <input type="checkbox" id="first_gen" name="first_gen" checked>
+                                    <label for="first_gen">Are you a First-Generation College Student?</label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <br>
+                                    <strong>Extracurricular Interests:</strong><br>
+                                    <input type="checkbox" id="extra_debate" name="extracurricular" value="Debate">
+                                    <label for="extra_debate">Debate</label>
+
+                                    <input type="checkbox" id="extra_music" name="extracurricular" value="Music">
+                                    <label for="extra_music">Music</label>
+
+                                    <input type="checkbox" id="extra_volunteer" name="extracurricular"
+                                        value="Volunteering" checked>
+                                    <label for="extra_volunteer">Volunteering</label>
+
+                                    <input type="checkbox" id="extra_astronomy" name="extracurricular"
+                                        value="Astronomy">
+                                    <label for="extra_astronomy">Astronomy</label>
+
+                                    <input type="checkbox" id="extra_robotics" name="extracurricular" value="Robotics">
+                                    <label for="extra_robotics">Robotics</label>
+
+                                    <input type="checkbox" id="extra_yoga" name="extracurricular"
+                                        value="Yoga & Meditation" checked>
+                                    <label for="extra_yoga">Yoga & Meditation</label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <br>
+                                    <label for="math_skills">Rate your confidence in your math skills:</label><br>
+                                    1 'Need Help'
+                                    <input type="range" id="math_skills" name="math_skills" min="1" max="10" value="8">
+                                    10 'Advanced'
+                                </td>
+                            </tr>
+                        </table>
+                    </fieldset>
+
+                    <br>
+
+                    <!-- Review & Submit Section -->
+                    <fieldset>
+                        <legend><strong>Review & Submit</strong></legend>
+                        <table border="0" width="100%" cellpadding="5">
+                            <tr>
+                                <td width="100%">
+                                    <label for="app_date">Date of Application</label><br>
+                                    <input type="date" id="app_date" name="app_date" value="2024-08-15" required>
+                                </td>
+                                <td width="50%">
+                                    <label for="signature">Electronic Signature</label><br>
+                                    <input type="text" id="signature" name="signature"
+                                        placeholder="Enter your signature" required>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <input type="checkbox" id="certify" name="certify" checked required>
+                                    <label for="certify">I certify that all information is true and accurate.</label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <br>
+                                    <label for="pin">Set a Security PIN for application tracking:</label><br>
+                                    <input type="password" id="pin" name="pin" value="1234" required>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" align="center">
+                                    <br><br>
+                                    <input type="submit" value="SUBMIT APPLICATION">
+                                    &nbsp;
+                                    <input type="button" value="SAVE DRAFT">
+                                </td>
+                            </tr>
+                        </table>
+                    </fieldset>
+
+                </td>
+            </tr>
+        </table>
+
+    </form>
+
+</body>
+
+</html>
