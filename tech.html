@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TechPulse 2026 | Annual Technical Festival</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+        },
+      },
+    }
+  </script>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans antialiased selection:bg-cyan-500 selection:text-slate-950">
+
+  <!-- Navigation -->
+  <nav class="fixed top-0 left-0 right-0 z-50 bg-slate-950/80 backdrop-blur-md border-b border-slate-800">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center space-x-2">
+        <span class="w-3 h-3 bg-cyan-400 rounded-full animate-ping"></span>
+        <span class="font-mono text-xl font-bold tracking-wider text-cyan-400">TECHPULSE<span class="text-indigo-400">'26</span></span>
+      </div>
+      <div class="hidden md:flex space-x-8 text-sm font-medium text-slate-300">
+        <a href="#about" class="hover:text-cyan-400 transition-colors">About</a>
+        <a href="#events" class="hover:text-cyan-400 transition-colors">Events</a>
+        <a href="#schedule" class="hover:text-cyan-400 transition-colors">Schedule</a>
+      </div>
+      <a href="#register" class="px-5 py-2 rounded-lg bg-gradient-to-r from-cyan-500 to-indigo-600 font-semibold text-sm hover:opacity-90 transition-opacity shadow-lg shadow-cyan-500/20">
+        Register Now
+      </a>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="relative pt-36 pb-20 md:pt-48 md:pb-32 px-6 overflow-hidden">
+    <!-- Background Glow Effects -->
+    <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute top-1/3 left-1/3 w-80 h-80 bg-indigo-600/20 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="max-w-4xl mx-auto text-center relative z-10">
+      <span class="inline-block px-4 py-1.5 rounded-full text-xs font-mono font-semibold bg-slate-900 border border-slate-700 text-cyan-400 mb-6">
+        🚀 ANNUAL NATIONAL TECH FESTIVAL • NOV 14–16, 2026
+      </span>
+      
+      <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight text-white mb-6 leading-tight">
+        Empowering Minds, <br />
+        <span class="bg-gradient-to-r from-cyan-400 via-teal-300 to-indigo-500 bg-clip-text text-transparent">
+          Engineering the Future
+        </span>
+      </h1>
+      
+      <p class="text-lg md:text-xl text-slate-400 mb-10 max-w-2xl mx-auto leading-relaxed">
+        Join students, educators, and industry innovators for three days of competitive hackathons, robotics challenges, guest keynotes, and technical exhibitions.
+      </p>
+
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a href="#register" class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-cyan-500 text-slate-950 font-bold hover:bg-cyan-400 transition-all shadow-lg shadow-cyan-500/30">
+          Claim Your Spot
+        </a>
+        <a href="#events" class="w-full sm:w-auto px-8 py-3.5 rounded-xl border border-slate-700 bg-slate-900/50 hover:bg-slate-800 transition-all font-semibold text-slate-300">
+          Explore Events
+        </a>
+      </div>
+
+      <!-- Quick Stats -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-16 pt-12 border-t border-slate-800/80 max-w-3xl mx-auto">
+        <div>
+          <div class="text-2xl md:text-3xl font-extrabold text-white">20+</div>
+          <div class="text-xs text-slate-400 font-mono mt-1">Competitions</div>
+        </div>
+        <div>
+          <div class="text-2xl md:text-3xl font-extrabold text-white">₹2,50,000</div>
+          <div class="text-xs text-slate-400 font-mono mt-1">Prize Pool</div>
+        </div>
+        <div>
+          <div class="text-2xl md:text-3xl font-extrabold text-white">30+</div>
+          <div class="text-xs text-slate-400 font-mono mt-1">Colleges</div>
+        </div>
+        <div>
+          <div class="text-2xl md:text-3xl font-extrabold text-white">3 Days</div>
+          <div class="text-xs text-slate-400 font-mono mt-1">Hands-On Tech</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Key Event Highlights -->
+  <section id="events" class="py-20 px-6 max-w-7xl mx-auto">
+    <div class="text-center max-w-2xl mx-auto mb-16">
+      <h2 class="text-3xl font-bold text-white mb-4">Featured Events</h2>
+      <p class="text-slate-400">Compete, innovate, and showcase your skills across multiple engineering and technology disciplines.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <!-- Event 1 -->
+      <div class="p-8 rounded-2xl bg-slate-900/80 border border-slate-800 hover:border-cyan-500/50 transition-all group">
+        <div class="w-12 h-12 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center font-mono font-bold text-lg mb-6 group-hover:scale-110 transition-transform">
+          01
+        </div>
+        <h3 class="text-xl font-bold text-white mb-3">HackPulse 24hr</h3>
+        <p class="text-slate-400 text-sm leading-relaxed mb-6">
+          Build real-world web, AI, or hardware solutions in an overnight hackathon with mentorship from industry leaders.
+        </p>
+        <span class="text-xs font-mono text-cyan-400 bg-cyan-500/10 px-3 py-1 rounded-full">₹1,00,000 Grand Prize</span>
+      </div>
+
+      <!-- Event 2 -->
+      <div class="p-8 rounded-2xl bg-slate-900/80 border border-slate-800 hover:border-indigo-500/50 transition-all group">
+        <div class="w-12 h-12 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center font-mono font-bold text-lg mb-6 group-hover:scale-110 transition-transform">
+          02
+        </div>
+        <h3 class="text-xl font-bold text-white mb-3">RoboWars & Arena</h3>
+        <p class="text-slate-400 text-sm leading-relaxed mb-6">
+          Custom robot battles, line-following challenges, and autonomous drone navigation obstacles.
+        </p>
+        <span class="text-xs font-mono text-indigo-400 bg-indigo-500/10 px-3 py-1 rounded-full">Hardware & Robotics</span>
+      </div>
+
+      <!-- Event 3 -->
+      <div class="p-8 rounded-2xl bg-slate-900/80 border border-slate-800 hover:border-teal-500/50 transition-all group">
+        <div class="w-12 h-12 rounded-xl bg-teal-500/10 text-teal-400 flex items-center justify-center font-mono font-bold text-lg mb-6 group-hover:scale-110 transition-transform">
+          03
+        </div>
+        <h3 class="text-xl font-bold text-white mb-3">TechExpo & Papers</h3>
+        <p class="text-slate-400 text-sm leading-relaxed mb-6">
+          Present groundbreaking research papers, working models, and sustainable tech prototypes to expert panels.
+        </p>
+        <span class="text-xs font-mono text-teal-400 bg-teal-500/10 px-3 py-1 rounded-full">Faculty & Students</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Registration Form Section -->
+  <section id="register" class="py-20 px-6 max-w-3xl mx-auto">
+    <div class="p-8 md:p-12 rounded-3xl bg-slate-900 border border-slate-800 shadow-2xl relative">
+      <div class="text-center mb-10">
+        <h2 class="text-3xl font-bold text-white mb-2">Register Your Invitation</h2>
+        <p class="text-slate-400 text-sm">Free entry for faculty members and participating student teams.</p>
+      </div>
+
+      <form class="space-y-6" onsubmit="event.preventDefault(); alert('Registration submitted!');">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-xs font-mono text-slate-300 mb-2">FULL NAME *</label>
+            <input type="text" required placeholder="John Doe" class="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-white focus:outline-none focus:border-cyan-500 transition-colors text-sm" />
+          </div>
+          <div>
+            <label class="block text-xs font-mono text-slate-300 mb-2">INSTITUTION EMAIL *</label>
+            <input type="email" required placeholder="john@college.edu" class="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-white focus:outline-none focus:border-cyan-500 transition-colors text-sm" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-xs font-mono text-slate-300 mb-2">ROLE *</label>
+            <select class="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-slate-300 focus:outline-none focus:border-cyan-500 transition-colors text-sm">
+              <option>Student Participant</option>
+              <option>Faculty / Educator</option>
+              <option>Industry Delegate</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-mono text-slate-300 mb-2">PRIMARY INTEREST *</label>
+            <select class="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-slate-300 focus:outline-none focus:border-cyan-500 transition-colors text-sm">
+              <option>Hackathon</option>
+              <option>Robotics</option>
+              <option>Paper Presentation</option>
+              <option>General Attendee</option>
+            </select>
+          </div>
+        </div>
+
+        <button type="submit" class="w-full py-4 rounded-xl bg-gradient-to-r from-cyan-500 to-indigo-600 font-bold text-white hover:opacity-95 transition-opacity shadow-lg shadow-cyan-500/25">
+          Confirm Registration
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-8 px-6 border-t border-slate-900 text-center text-xs text-slate-500 font-mono">
+    <p>© 2026 TechPulse Festival Committee. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>
