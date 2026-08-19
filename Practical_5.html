@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Food Menu with Navigation Bar</title>
+  <!-- Tailwind CSS CDN -->
+  <link href="./dist/output.css" rel="stylesheet">
+</head>
+<body class="bg-slate-50 font-sans antialiased text-slate-800">
+
+  <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-100 shadow-sm">
+    <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      
+      <!-- Brand Logo -->
+      <a href="#" class="flex items-center gap-2 group">
+        <div class="bg-amber-500 text-white p-2 rounded-xl group-hover:bg-amber-600 transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+          </svg>
+        </div>
+        <span class="text-2xl font-black text-slate-900 tracking-tight">Savory<span class="text-amber-500">Bite</span></span>
+      </a>
+
+        <!-- Navigation Links -->
+      <ul class="hidden md:flex items-center gap-8 font-medium text-slate-600 text-sm">
+        <li><a href="#" class="hover:text-amber-600 transition-colors">Home</a></li>
+        <li><a href="#menu" class="text-amber-600 font-semibold">Menu</a></li>
+        <li><a href="#" class="hover:text-amber-600 transition-colors">About Us</a></li>
+        <li><a href="#" class="hover:text-amber-600 transition-colors">Reviews</a></li>
+        <li><a href="#" class="hover:text-amber-600 transition-colors">Contact</a></li>
+      </ul>
+
+      <div class="flex items-center gap-4">
+        <!-- Cart Button -->
+        <button class="relative p-2.5 text-slate-700 hover:text-amber-600 transition-colors rounded-xl hover:bg-slate-100" aria-label="Cart">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z" />
+          </svg>
+          <span class="absolute top-1.5 right-1.5 bg-amber-500 text-white text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center">
+            3
+          </span>
+        </button>
+
+        <!-- CTA Reservation Button -->
+        <a href="#" class="hidden sm:inline-flex bg-amber-500 hover:bg-amber-600 text-white text-sm font-semibold px-5 py-2.5 rounded-xl shadow-md shadow-amber-500/20 transition-all duration-200">
+          Book Table
+        </a>
+
+        <!-- Mobile Menu Toggle Button -->
+        <button class="md:hidden p-2 text-slate-700 hover:bg-slate-100 rounded-lg" aria-label="Toggle Navigation">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
+
+    </nav>
+  </header>
+  <!-- ================= NAV BAR END ================= -->
+
+
+  <!-- Food Menu Section -->
+  <section id="menu" class="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    
+    <!-- Section Header -->
+    <div class="text-center max-w-2xl mx-auto mb-12">
+      <span class="text-amber-600 font-semibold text-sm tracking-widest uppercase">Chef's Special</span>
+      <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-2">Popular Dishes</h2>
+      <p class="text-slate-600 mt-3 text-base sm:text-lg">
+        Explore our handpicked selection of delicious meals crafted with fresh ingredients and authentic flavors.
+      </p>
+    </div>
+
+    <!-- Food Menu Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+      <!-- Food Card 1 -->
+      <div class="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 flex flex-col group">
+        <!-- Image Container -->
+        <div class="relative overflow-hidden aspect-[4/3]">
+          <img 
+            src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=800&q=80" 
+            alt="Classic Artisan Burger" 
+            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          >
+          <span class="absolute top-4 right-4 bg-amber-500 text-white font-bold text-sm px-3 py-1 rounded-full shadow-md">
+            $14.99
+          </span>
+        </div>
+        <!-- Card Body -->
+        <div class="p-6 flex flex-col flex-grow justify-between">
+          <div>
+            <h3 class="text-xl font-bold text-slate-900 group-hover:text-amber-600 transition-colors">
+              Classic Artisan Burger
+            </h3>
+            <p class="text-slate-600 mt-2 text-sm leading-relaxed">
+              Juicy grass-fed beef patty topped with aged cheddar, crispy bacon, caramelized onions, and house sauce on a toasted brioche bun.
+            </p>
+          </div>
+          <!-- Action Button -->
+          <button class="mt-6 w-full bg-slate-900 hover:bg-amber-600 text-white font-semibold py-2.5 px-4 rounded-xl transition-colors duration-200 flex items-center justify-center gap-2">
+            <span>Order Now</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Food Card 2 -->
+      <div class="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 flex flex-col group">
+        <!-- Image Container -->
+        <div class="relative overflow-hidden aspect-[4/3]">
+          <img 
+            src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=800&q=80" 
+            alt="Truffle Mushroom Pizza" 
+            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          >
+          <span class="absolute top-4 right-4 bg-amber-500 text-white font-bold text-sm px-3 py-1 rounded-full shadow-md">
+            $18.50
+          </span>
+        </div>
+        <!-- Card Body -->
+        <div class="p-6 flex flex-col flex-grow justify-between">
+          <div>
+            <h3 class="text-xl font-bold text-slate-900 group-hover:text-amber-600 transition-colors">
+              Truffle Mushroom Pizza
+            </h3>
+            <p class="text-slate-600 mt-2 text-sm leading-relaxed">
+              Hand-tossed sourdough pizza topped with wild mushrooms, fresh mozzarella, truffle oil, and garnished with fresh arugula.
+            </p>
+          </div>
+          <!-- Action Button -->
+          <button class="mt-6 w-full bg-slate-900 hover:bg-amber-600 text-white font-semibold py-2.5 px-4 rounded-xl transition-colors duration-200 flex items-center justify-center gap-2">
+            <span>Order Now</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Food Card 3 -->
+      <div class="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 flex flex-col group">
+        <!-- Image Container -->
+        <div class="relative overflow-hidden aspect-[4/3]">
+          <img 
+            src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80" 
+            alt="Fresh Salmon Buddha Bowl" 
+            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          >
+          <span class="absolute top-4 right-4 bg-amber-500 text-white font-bold text-sm px-3 py-1 rounded-full shadow-md">
+            $16.25
+          </span>
+        </div>
+        <!-- Card Body -->
+        <div class="p-6 flex flex-col flex-grow justify-between">
+          <div>
+            <h3 class="text-xl font-bold text-slate-900 group-hover:text-amber-600 transition-colors">
+              Fresh Salmon Buddha Bowl
+            </h3>
+            <p class="text-slate-600 mt-2 text-sm leading-relaxed">
+              Pan-seared Atlantic salmon served over quinoa, roasted chickpeas, fresh avocado, edamame, and a creamy sesame dressing.
+            </p>
+          </div>
+          <!-- Action Button -->
+          <button class="mt-6 w-full bg-slate-900 hover:bg-amber-600 text-white font-semibold py-2.5 px-4 rounded-xl transition-colors duration-200 flex items-center justify-center gap-2">
+            <span>Order Now</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</body>
+</html>
