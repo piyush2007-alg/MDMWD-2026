@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CM25098</title>
+  <link href="./dist/output.css" rel="stylesheet" />
+</head>
+<body class="bg-gray-100 text-gray-800">
+  <main class="mx-auto max-w-3xl px-6 py-12">
+    <h1 class="mb-8 text-center text-3xl font-bold text-blue-700">
+      College Department FAQ
+    </h1>
+
+    <section id="faq-container" class="space-y-4">
+  <div class="faq-item rounded-lg bg-white shadow">
+    <button class="faq-question flex w-full justify-between p-5 text-left font-semibold">
+      How do I register for courses?
+      <span class="icon">+</span>
+    </button>
+    <p class="faq-answer hidden px-5 pb-5">
+      Course registration can be completed through the student portal during the registration period.
+    </p>
+  </div>
+
+  <div class="faq-item rounded-lg bg-white shadow">
+    <button class="faq-question flex w-full justify-between p-5 text-left font-semibold">
+      How can I contact the department?
+      <span class="icon">+</span>
+    </button>
+    <p class="faq-answer hidden px-5 pb-5">
+      You can contact the department office by email or visit during official working hours.
+    </p>
+  </div>
+
+  <div class="faq-item rounded-lg bg-white shadow">
+    <button class="faq-question flex w-full justify-between p-5 text-left font-semibold">
+      Where can I find the examination timetable?
+      <span class="icon">+</span>
+    </button>
+    <p class="faq-answer hidden px-5 pb-5">
+      The examination timetable is published on the college website and student portal.
+    </p>
+  </div>
+
+  <div class="faq-item rounded-lg bg-white shadow">
+    <button class="faq-question flex w-full justify-between p-5 text-left font-semibold">
+      What are the department office hours?
+      <span class="icon">+</span>
+    </button>
+    <p class="faq-answer hidden px-5 pb-5">
+      The department office is open from 9:00 AM to 4:00 PM, Monday through Friday.
+    </p>
+  </div>
+
+  <div class="faq-item rounded-lg bg-white shadow">
+    <button class="faq-question flex w-full justify-between p-5 text-left font-semibold">
+      How do I apply for a scholarship?
+      <span class="icon">+</span>
+    </button>
+    <p class="faq-answer hidden px-5 pb-5">
+      Scholarship applications can be submitted through the student portal or financial aid office.
+    </p>
+  </div>
+
+  <div class="faq-item rounded-lg bg-white shadow">
+    <button class="faq-question flex w-full justify-between p-5 text-left font-semibold">
+      Where can I download study materials?
+      <span class="icon">+</span>
+    </button>
+    <p class="faq-answer hidden px-5 pb-5">
+      Study materials are available on the department learning management system.
+    </p>
+  </div>
+
+  <div class="faq-item rounded-lg bg-white shadow">
+    <button class="faq-question flex w-full justify-between p-5 text-left font-semibold">
+      How can I request a student certificate?
+      <span class="icon">+</span>
+    </button>
+    <p class="faq-answer hidden px-5 pb-5">
+      Submit a certificate request form to the department office or through the student portal.
+    </p>
+  </div>
+
+  <div class="faq-item rounded-lg bg-white shadow">
+    <button class="faq-question flex w-full justify-between p-5 text-left font-semibold">
+      What should I do if I forget my portal password?
+      <span class="icon">+</span>
+    </button>
+    <p class="faq-answer hidden px-5 pb-5">
+      Use the “Forgot Password” option on the student portal or contact technical support.
+    </p>
+  </div>
+
+  <div class="faq-item rounded-lg bg-white shadow">
+    <button class="faq-question flex w-full justify-between p-5 text-left font-semibold">
+      How do I submit an assignment?
+      <span class="icon">+</span>
+    </button>
+    <p class="faq-answer hidden px-5 pb-5">
+      Assignments should be submitted through the learning management system before the deadline.
+    </p>
+  </div>
+
+  <div class="faq-item rounded-lg bg-white shadow">
+    <button class="faq-question flex w-full justify-between p-5 text-left font-semibold">
+      Where can I find the academic calendar?
+      <span class="icon">+</span>
+    </button>
+    <p class="faq-answer hidden px-5 pb-5">
+      The academic calendar is available on the college website and student portal.
+    </p>
+  </div>
+
+  <div class="faq-item rounded-lg bg-white shadow">
+    <button class="faq-question flex w-full justify-between p-5 text-left font-semibold">
+      How can I join a department club?
+      <span class="icon">+</span>
+    </button>
+    <p class="faq-answer hidden px-5 pb-5">
+      Contact the department office or club coordinator to learn about membership and registration.
+    </p>
+  </div>
+
+  <div class="faq-item rounded-lg bg-white shadow">
+    <button class="faq-question flex w-full justify-between p-5 text-left font-semibold">
+      What facilities are available for students?
+      <span class="icon">+</span>
+    </button>
+    <p class="faq-answer hidden px-5 pb-5">
+      Students can access computer laboratories, libraries, study areas, and departmental resources.
+    </p>
+  </div>
+</section>
+  </main>
+
+  <script>
+    const questions = document.querySelectorAll(".faq-question");
+
+    questions.forEach((question) => {
+      question.addEventListener("click", () => {
+        const answer = question.nextElementSibling;
+        const icon = question.querySelector(".icon");
+
+        answer.classList.toggle("hidden");
+
+        if (answer.classList.contains("hidden")) {
+          icon.textContent = "+";
+        } else {
+          icon.textContent = "−";
+        }
+      });
+    }); 
+  </script>
+</body>
+</html>
+
