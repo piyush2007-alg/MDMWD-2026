@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FocusTask - Student Task Manager</title>
+  
+  <link href="./dist/output.css" rel="stylesheet" />
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script> 
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+            }
+          },
+          boxShadow: {
+            'card': '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)'
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(156, 163, 175, 0.4);
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(107, 114, 128, 0.7);
+    }
+    .task-card {
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      background-color: #ffffff;
+      color: #0f172a;
+    }
+
+    html:not(.dark) .task-card {
+      box-shadow: 0 8px 24px -12px rgba(15, 23, 42, 0.18);
+    }
+
+    html:not(.dark) #taskModal > div {
+      background-color: #ffffff;
+      color: #0f172a;
+    }
+
+    html:not(.dark) #taskModal input,
+    html:not(.dark) #taskModal textarea,
+    html:not(.dark) #taskModal select,
+    html:not(.dark) #taskModal button {
+      color: #0f172a;
+    }
+  </style>
+</head>
+
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-full font-sans transition-colors duration-300 flex flex-col">
+
+  <header class="sticky top-0 z-30 bg-white/85 dark:bg-slate-900/85 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-rose-500 flex items-center justify-center text-white shadow-md shadow-indigo-500/20">
+            <i class="fa-solid fa-bullseye text-lg"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h1 class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-indigo-600 via-purple-600 to-rose-500 dark:from-indigo-400 dark:via-purple-400 dark:to-rose-400 bg-clip-text text-transparent">
+                FocusTask
+              </h1>
+              <span class="text-[10px] font-bold uppercase tracking-wider bg-indigo-100 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 px-2 py-0.5 rounded-full">
+                Student
+              </span>
+            </div>
+            <p class="text-xs text-slate-500 dark:text-slate-400 hidden sm:block">Academic & Personal Productivity</p>
+          </div>
+        </div>
+
+        <div class="hidden md:flex flex-1 max-w-md mx-8">
+          <div class="relative w-full">
+            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+            <input 
+              type="text" 
+              id="searchInput" 
+              placeholder="Search tasks, subjects, notes..." 
+              class="w-full pl-10 pr-4 py-2 text-sm bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700/80 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500"
+            >
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2 sm:gap-3">
+          
+          <div class="relative">
+            <button 
+              id="menuDataBtn" 
+              title="Backup & Tools"
+              class="p-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            >
+              <i class="fa-solid fa-sliders"></i>
+            </button>
+            
+            <div 
+              id="dataMenu" 
+              class="hidden absolute right-0 mt-2 w-52 bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-700 py-1.5 z-50 text-sm"
+            >
+              <button id="exportTasksBtn" class="w-full text-left px-4 py-2.5 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700/50 flex items-center gap-2.5">
+                <i class="fa-solid fa-file-export text-indigo-500"></i> Export JSON Backup
+              </button>
+              <label for="importFileInput" class="w-full text-left px-4 py-2.5 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700/50 flex items-center gap-2.5 cursor-pointer">
+                <i class="fa-solid fa-file-import text-teal-500"></i> Import JSON Backup
+                <input type="file" id="importFileInput" accept=".json" class="hidden">
+              </label>
+              <div class="my-1 border-t border-slate-100 dark:border-slate-700"></div>
+              <button id="clearCompletedBtn" class="w-full text-left px-4 py-2.5 text-amber-600 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-950/30 flex items-center gap-2.5">
+                <i class="fa-solid fa-broom"></i> Clear Completed
+              </button>
+              <button id="resetDemoBtn" class="w-full text-left px-4 py-2.5 text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30 flex items-center gap-2.5">
+                <i class="fa-solid fa-rotate-left"></i> Reset Sample Data
+              </button>
+            </div>
+          </div>
+
+          <button 
+            id="themeToggleBtn" 
+            title="Toggle Light / Dark Mode"
+            class="p-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+          >
+            <i id="themeIcon" class="fa-solid fa-moon text-indigo-500 dark:text-amber-400 text-lg"></i>
+          </button>
+
+          <button 
+            id="openAddTaskModalBtn" 
+            class="inline-flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white px-4 py-2.5 rounded-xl font-medium text-sm shadow-md shadow-emerald-600/25 active:scale-[0.98] transition-all"
+          >
+            <i class="fa-solid fa-plus text-xs"></i>
+            <span class="hidden sm:inline">New Task</span>
+          </button>
+
+        </div>
+      </div>
+
+      <div class="pb-3 pt-1 md:hidden">
+        <div class="relative w-full">
+          <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+          <input 
+            type="text" 
+            id="mobileSearchInput" 
+            placeholder="Search tasks, subjects, notes..." 
+            class="w-full pl-10 pr-4 py-2 text-sm bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-800 dark:text-slate-100"
+          >
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <section class="bg-indigo-900/5 dark:bg-slate-800/40 border-b border-slate-200/60 dark:border-slate-800 py-2.5 px-4 overflow-x-auto">
+    <div class="max-w-7xl mx-auto flex items-center gap-2 text-xs">
+      <span class="font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider flex items-center gap-1 shrink-0 mr-1">
+        <i class="fa-solid fa-bolt text-amber-500"></i> Quick Presets:
+      </span>
+      <button onclick="addPresetTask('assignment')" class="shrink-0 bg-white dark:bg-slate-800 hover:bg-indigo-50 dark:hover:bg-indigo-950/50 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 px-3 py-1.5 rounded-xl transition-all flex items-center gap-1.5 shadow-sm">
+        🎓 Submit Assignment
+      </button>
+      <button onclick="addPresetTask('revise')" class="shrink-0 bg-white dark:bg-slate-800 hover:bg-indigo-50 dark:hover:bg-indigo-950/50 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 px-3 py-1.5 rounded-xl transition-all flex items-center gap-1.5 shadow-sm">
+        📖 Revise Notes
+      </button>
+      <button onclick="addPresetTask('project')" class="shrink-0 bg-white dark:bg-slate-800 hover:bg-amber-50 dark:hover:bg-amber-950/50 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 px-3 py-1.5 rounded-xl transition-all flex items-center gap-1.5 shadow-sm">
+        💻 Group Project Sprint
+      </button>
+      <button onclick="addPresetTask('pastpapers')" class="shrink-0 bg-white dark:bg-slate-800 hover:bg-rose-50 dark:hover:bg-rose-950/50 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 px-3 py-1.5 rounded-xl transition-all flex items-center gap-1.5 shadow-sm">
+        📝 Practice Past Papers
+      </button>
+      <button onclick="addPresetTask('workout')" class="shrink-0 bg-white dark:bg-slate-800 hover:bg-teal-50 dark:hover:bg-teal-950/50 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 px-3 py-1.5 rounded-xl transition-all flex items-center gap-1.5 shadow-sm">
+        🏃 30-min Workout
+      </button>
+    </div>
+  </section>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 w-full flex flex-col gap-6">
+
+    <section class="grid grid-cols-1 md:grid-cols-6 gap-4">
+      
+      <div class="md:col-span-2 bg-gradient-to-br from-indigo-900 via-indigo-800 to-slate-900 text-white rounded-2xl p-5 shadow-card relative overflow-hidden flex flex-col justify-between min-h-[140px]">
+        <div class="absolute -right-8 -bottom-8 w-36 h-36 bg-rose-500/20 rounded-full blur-2xl pointer-events-none"></div>
+        <div class="absolute right-20 top-0 w-24 h-24 bg-indigo-400/20 rounded-full blur-xl pointer-events-none"></div>
+
+        <div class="relative z-10 flex items-start justify-between gap-4">
+          <div>
+            <span id="currentDateBadge" class="text-xs font-semibold text-indigo-200 tracking-wider uppercase bg-white/10 backdrop-blur-md px-2.5 py-1 rounded-lg inline-block mb-2">
+              Focus Hub
+            </span>
+            <h2 class="text-lg sm:text-xl font-bold text-white">Daily Academic Progress</h2>
+            <p id="motivationalSubtitle" class="text-xs text-indigo-200 mt-1">Ready to tackle your academic goals?</p>
+          </div>
+          <div class="text-right">
+            <span id="completionPercentageText" class="text-3xl font-extrabold text-teal-300">0%</span>
+            <span class="block text-[11px] text-indigo-200">Done</span>
+          </div>
+        </div>
+
+        <div class="relative z-10 mt-4">
+          <div class="flex justify-between text-xs text-indigo-200 mb-1.5 font-medium">
+            <span id="progressRatioText">0 of 0 tasks completed</span>
+            <span id="pendingRatioText">0 pending</span>
+          </div>
+          <div class="w-full bg-slate-900/60 rounded-full h-2.5 p-0.5 overflow-hidden border border-white/10">
+            <div 
+              id="mainProgressBar" 
+              class="bg-gradient-to-r from-teal-400 via-indigo-400 to-rose-400 h-full rounded-full transition-all duration-500 ease-out" 
+              style="width: 0%"
+            ></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-800/80 rounded-2xl p-4 shadow-card flex items-center justify-between">
+        <div>
+          <p class="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Total Tasks</p>
+          <h3 id="statTotalCount" class="text-2xl font-bold text-slate-900 dark:text-white mt-1">0</h3>
+          <p class="text-xs text-slate-400 dark:text-slate-500 mt-0.5">Overall created</p>
+        </div>
+        <div class="w-12 h-12 rounded-xl bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-xl">
+          <i class="fa-solid fa-list-check"></i>
+        </div>
+      </div>
+
+      <div class="bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-800/80 rounded-2xl p-4 shadow-card flex items-center justify-between">
+        <div>
+          <p class="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Completed</p>
+          <h3 id="statCompletedCount" class="text-2xl font-bold text-emerald-600 dark:text-emerald-400 mt-1">0</h3>
+          <p class="text-xs text-slate-400 dark:text-slate-500 mt-0.5">Finished items</p>
+        </div>
+        <div class="w-12 h-12 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xl">
+          <i class="fa-solid fa-circle-check"></i>
+        </div>
+      </div>
+
+      <div class="bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-800/80 rounded-2xl p-4 shadow-card flex items-center justify-between">
+        <div>
+          <p class="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Pending</p>
+          <h3 id="statPendingCount" class="text-2xl font-bold text-amber-600 dark:text-amber-400 mt-1">0</h3>
+          <p class="text-xs text-slate-400 dark:text-slate-500 mt-0.5">Active tasks</p>
+        </div>
+        <div class="w-12 h-12 rounded-xl bg-amber-50 dark:bg-amber-950/50 text-amber-600 dark:text-amber-400 flex items-center justify-center text-xl">
+          <i class="fa-solid fa-spinner"></i>
+        </div>
+      </div>
+
+      <div class="bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-800/80 rounded-2xl p-4 shadow-card flex items-center justify-between">
+        <div>
+          <p class="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Overdue</p>
+          <h3 id="statOverdueCount" class="text-2xl font-bold text-rose-600 dark:text-rose-400 mt-1">0</h3>
+          <p class="text-xs text-slate-400 dark:text-slate-500 mt-0.5">Needs attention</p>
+        </div>
+        <div class="w-12 h-12 rounded-xl bg-rose-50 dark:bg-rose-950/50 text-rose-600 dark:text-rose-400 flex items-center justify-center text-xl">
+          <i class="fa-solid fa-clock-rotate-left"></i>
+        </div>
+      </div>
+
+    </section>
+
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
+      
+      <aside class="lg:col-span-1 bg-white dark:bg-slate-800/80 rounded-2xl p-3 border border-slate-100 dark:border-slate-800 shadow-card">
+        <p class="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 px-3 py-2">
+          Views & Status
+        </p>
+
+        <nav class="space-y-1" id="categoryTabs">
+          <button data-filter="all" class="tab-btn w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-all bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400">
+            <span class="flex items-center gap-2.5">
+              <i class="fa-solid fa-layer-group w-4"></i> All Tasks
+            </span>
+            <span id="badgeAll" class="text-xs px-2 py-0.5 rounded-full bg-indigo-100 dark:bg-indigo-900/80 font-semibold">0</span>
+          </button>
+
+          <button data-filter="active" class="tab-btn w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50">
+            <span class="flex items-center gap-2.5">
+              <i class="fa-solid fa-spinner w-4 text-amber-500"></i> Active / Pending
+            </span>
+            <span id="badgeActive" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-700 font-semibold text-slate-600 dark:text-slate-300">0</span>
+          </button>
+
+          <button data-filter="completed" class="tab-btn w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50">
+            <span class="flex items-center gap-2.5">
+              <i class="fa-solid fa-circle-check w-4 text-emerald-500"></i> Completed
+            </span>
+            <span id="badgeCompleted" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-700 font-semibold text-slate-600 dark:text-slate-300">0</span>
+          </button>
+
+          <button data-filter="overdue" class="tab-btn w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50">
+            <span class="flex items-center gap-2.5">
+              <i class="fa-solid fa-clock w-4 text-rose-500"></i> Overdue Tasks
+            </span>
+            <span id="badgeOverdue" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-700 font-semibold text-slate-600 dark:text-slate-300">0</span>
+          </button>
+
+          <div class="my-2 border-t border-slate-100 dark:border-slate-700/60"></div>
+          
+          <p class="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 px-3 py-1">
+            Categories
+          </p>
+
+          <button data-filter="academic" class="tab-btn w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50">
+            <span class="flex items-center gap-2.5">
+              <i class="fa-solid fa-graduation-cap w-4 text-indigo-500"></i> Academic
+            </span>
+            <span id="badgeAcademic" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-700 font-semibold text-slate-600 dark:text-slate-300">0</span>
+          </button>
+
+          <button data-filter="personal" class="tab-btn w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50">
+            <span class="flex items-center gap-2.5">
+              <i class="fa-solid fa-user w-4 text-teal-500"></i> Personal
+            </span>
+            <span id="badgePersonal" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-700 font-semibold text-slate-600 dark:text-slate-300">0</span>
+          </button>
+
+          <button data-filter="exam" class="tab-btn w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50">
+            <span class="flex items-center gap-2.5">
+              <i class="fa-solid fa-file-pen w-4 text-rose-500"></i> Exam Prep
+            </span>
+            <span id="badgeExam" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-700 font-semibold text-slate-600 dark:text-slate-300">0</span>
+          </button>
+
+          <button data-filter="project" class="tab-btn w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50">
+            <span class="flex items-center gap-2.5">
+              <i class="fa-solid fa-diagram-project w-4 text-amber-500"></i> Project
+            </span>
+            <span id="badgeProject" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-700 font-semibold text-slate-600 dark:text-slate-300">0</span>
+          </button>
+
+          <button data-filter="health" class="tab-btn w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50">
+            <span class="flex items-center gap-2.5">
+              <i class="fa-solid fa-heart-pulse w-4 text-emerald-500"></i> Health
+            </span>
+            <span id="badgeHealth" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-700 font-semibold text-slate-600 dark:text-slate-300">0</span>
+          </button>
+        </nav>
+      </aside>
+
+      <section class="lg:col-span-3 flex flex-col gap-4">
+        
+        <div class="bg-white dark:bg-slate-800/80 rounded-2xl p-4 border border-slate-100 dark:border-slate-800 shadow-card flex flex-wrap items-center justify-between gap-3">
+          
+          <div class="flex items-center gap-2">
+            <h3 id="currentFilterTitle" class="text-base font-bold text-slate-800 dark:text-white flex items-center gap-2">
+              All Tasks
+            </h3>
+            <span id="visibleTaskCountBadge" class="text-xs bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2.5 py-0.5 rounded-md font-medium">
+              0 items
+            </span>
+          </div>
+
+          <div class="flex items-center gap-2 ml-auto sm:ml-0">
+            <label for="sortBySelect" class="text-xs font-medium text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
+              <i class="fa-solid fa-arrow-down-short-wide"></i> Sort:
+            </label>
+            <select 
+              id="sortBySelect" 
+              class="bg-slate-100 dark:bg-slate-700/80 border border-slate-200 dark:border-slate-600 rounded-xl text-xs px-3 py-1.5 text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            >
+              <option value="dueDateAsc">Due Date (Earliest)</option>
+              <option value="dueDateDesc">Due Date (Latest)</option>
+              <option value="priorityDesc">Priority (High to Low)</option>
+              <option value="createdDesc">Newest Created</option>
+              <option value="alphabetical">Title (A-Z)</option>
+            </select>
+          </div>
+
+        </div>
+
+        <div id="taskListContainer" class="space-y-3 min-h-[250px]"></div>
+
+        <div id="emptyState" class="hidden bg-white dark:bg-slate-800/60 rounded-2xl border border-dashed border-slate-300 dark:border-slate-700 p-8 text-center flex flex-col items-center justify-center gap-3 py-12">
+          <div class="w-16 h-16 rounded-2xl bg-indigo-50 dark:bg-slate-700/50 text-indigo-500 flex items-center justify-center text-2xl">
+            <i class="fa-solid fa-clipboard-check"></i>
+          </div>
+          <h4 class="text-base font-semibold text-slate-800 dark:text-slate-200">No tasks found</h4>
+          <p class="text-xs text-slate-500 dark:text-slate-400 max-w-sm">
+            Everything is clear here! Click below or use quick presets to add your next task.
+          </p>
+          <button 
+            onclick="document.getElementById('openAddTaskModalBtn').click()"
+            class="mt-2 text-xs bg-indigo-600 text-white hover:bg-indigo-700 font-semibold px-4 py-2 rounded-xl shadow-md transition-all"
+          >
+            <i class="fa-solid fa-plus mr-1"></i> Add New Task
+          </button>
+        </div>
+
+      </section>
+
+    </div>
+
+  </main>
+
+  <div id="taskModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
+    
+    <div class="bg-white dark:bg-slate-800 rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-100 dark:border-slate-700 transform scale-95 transition-transform duration-300 max-h-[90vh] overflow-y-auto">
+      
+      <div class="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-700">
+        <h3 id="modalTitle" class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+          <i class="fa-solid fa-circle-plus text-indigo-500"></i> Create New Task
+        </h3>
+        <button id="closeModalBtn" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors p-1">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <form id="taskForm" class="mt-4 space-y-4">
+        <input type="hidden" id="editingTaskId" value="">
+
+        <div>
+          <label for="taskTitle" class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1">
+            Task Title <span class="text-rose-500">*</span>
+          </label>
+          <input 
+            type="text" 
+            id="taskTitle" 
+            required 
+            placeholder="e.g., Submit Physics Homework 3" 
+            class="w-full px-3.5 py-2.5 text-sm bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-800 dark:text-slate-100"
+          >
+        </div>
+
+        <div>
+          <label for="taskDescription" class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1">
+            Description / Notes
+          </label>
+          <textarea 
+            id="taskDescription" 
+            rows="2" 
+            placeholder="Include relevant details, links or requirements..." 
+            class="w-full px-3.5 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-800 dark:text-slate-100 resize-none"
+          ></textarea>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label for="taskCategory" class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1">
+              Category
+            </label>
+            <select 
+              id="taskCategory" 
+              class="w-full px-3.5 py-2.5 text-sm bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-800 dark:text-slate-100"
+            >
+              <option value="academic">🎓 Academic</option>
+              <option value="personal">🌿 Personal</option>
+              <option value="exam">📝 Exam Prep</option>
+              <option value="project">💻 Project</option>
+              <option value="health">🏃 Health</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="taskPriority" class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1">
+              Priority Level
+            </label>
+            <select 
+              id="taskPriority" 
+              class="w-full px-3.5 py-2.5 text-sm bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-800 dark:text-slate-100"
+            >
+              <option value="low">🟢 Low Priority</option>
+              <option value="medium" selected>🟡 Medium Priority</option>
+              <option value="high">🔴 High Priority</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label for="taskTag" class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1">
+              Subject Tag
+            </label>
+            <select 
+              id="taskTag" 
+              class="w-full px-3.5 py-2.5 text-sm bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-800 dark:text-slate-100"
+            >
+              <option value="Math">📐 Math</option>
+              <option value="Science">🧪 Science</option>
+              <option value="CS">💻 Computer Science</option>
+              <option value="History">🏛️ History</option>
+              <option value="Literature">📚 Literature</option>
+              <option value="Health">💪 Health & Gym</option>
+              <option value="Work">💼 Work & Career</option>
+              <option value="General" selected>📌 General</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="taskDueDate" class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1">
+              Due Date & Time
+            </label>
+            <input 
+              type="datetime-local" 
+              id="taskDueDate" 
+              class="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-800 dark:text-slate-100"
+            >
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1">
+            Subtasks Checklist
+          </label>
+          <div class="flex gap-2 mb-2">
+            <input 
+              type="text" 
+              id="subtaskInput" 
+              placeholder="e.g., Read Section 3.2" 
+              class="flex-1 px-3 py-2 text-xs bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-800 dark:text-slate-100"
+            >
+            <button 
+              type="button" 
+              id="addSubtaskBtn" 
+              class="px-3 py-2 text-xs bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 font-semibold text-slate-700 dark:text-slate-200 rounded-xl transition-colors"
+            >
+              <i class="fa-solid fa-plus mr-1"></i> Add
+            </button>
+          </div>
+          <ul id="modalSubtaskList" class="space-y-1.5 max-h-32 overflow-y-auto pr-1"></ul>
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-4 border-t border-slate-100 dark:border-slate-700">
+          <button 
+            type="button" 
+            id="cancelModalBtn" 
+            class="px-4 py-2.5 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-xl transition-colors"
+          >
+            Cancel
+          </button>
+          <button 
+            type="submit" 
+            class="px-5 py-2.5 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-md shadow-indigo-600/20 active:scale-95 transition-all flex items-center gap-1.5"
+          >
+            <i class="fa-solid fa-check text-xs"></i> Save Task
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none"></div>
+
+  <script>
+    const SAMPLE_TASKS = [
+      {
+        id: "ft-1",
+        title: "Submit Multivariable Calculus Homework 4",
+        description: "Complete exercises from Section 4.2 to 4.5. Upload PDF scan to Canvas portal.",
+        category: "academic",
+        tag: "Math",
+        priority: "high",
+        dueDate: new Date(Date.now() + 86400000).toISOString().slice(0, 16),
+        completed: false,
+        createdAt: new Date(Date.now() - 3600000 * 5).toISOString(),
+        subtasks: [
+          { id: "sub-1-1", text: "Problem set 1 to 10", completed: true },
+          { id: "sub-1-2", text: "Proof exercise 14", completed: false },
+          { id: "sub-1-3", text: "Scan and submit online", completed: false }
+        ]
+      },
+      {
+        id: "ft-2",
+        title: "Study for Midterm History Exam",
+        description: "Review Chapter 5-8 notes and outline key timelines.",
+        category: "exam",
+        tag: "History",
+        priority: "high",
+        dueDate: new Date(Date.now() + 86400000 * 2).toISOString().slice(0, 16),
+        completed: false,
+        createdAt: new Date(Date.now() - 3600000 * 24).toISOString(),
+        subtasks: [
+          { id: "sub-2-1", text: "Highlight dates and key figures", completed: true },
+          { id: "sub-2-2", text: "Practice flashcards", completed: false }
+        ]
+      },
+      {
+        id: "ft-3",
+        title: "CS Software Project Sprint 2",
+        description: "Finish React UI components and draft backend API integration.",
+        category: "project",
+        tag: "CS",
+        priority: "medium",
+        dueDate: new Date(Date.now() + 86400000 * 3).toISOString().slice(0, 16),
+        completed: false,
+        createdAt: new Date(Date.now() - 3600000 * 12).toISOString(),
+        subtasks: [
+          { id: "sub-3-1", text: "Setup state management", completed: true },
+          { id: "sub-3-2", text: "Test API response headers", completed: false }
+        ]
+      },
+      {
+        id: "ft-4",
+        title: "Weekly Cardio & Strength Workout",
+        description: "Target upper body and 20 mins HIIT treadmill run.",
+        category: "health",
+        tag: "Health",
+        priority: "low",
+        dueDate: new Date(Date.now() + 3600000 * 4).toISOString().slice(0, 16),
+        completed: true,
+        createdAt: new Date(Date.now() - 3600000 * 48).toISOString(),
+        subtasks: []
+      }
+    ];
+
+    let tasks = [];
+    let activeFilter = 'all';
+    let searchQuery = '';
+    let sortBy = 'dueDateAsc';
+    let modalSubtasks = [];
+    let lastDeletedTask = null;
+
+    function loadTasks() {
+      const stored = localStorage.getItem('focustask_tasks_v3');
+      if (stored) {
+        try {
+          tasks = JSON.parse(stored);
+        } catch (e) {
+          tasks = [...SAMPLE_TASKS];
+        }
+      } else {
+        tasks = [...SAMPLE_TASKS];
+        saveTasks();
+      }
+    }
+
+    function saveTasks() {
+      localStorage.setItem('focustask_tasks_v3', JSON.stringify(tasks));
+      renderApp();
+    }
+
+    function syncThemeIcon() {
+      const themeIcon = document.getElementById('themeIcon');
+      if (!themeIcon) return;
+
+      const isDark = document.documentElement.classList.contains('dark');
+      themeIcon.className = isDark
+        ? 'fa-solid fa-sun text-amber-400 text-lg'
+        : 'fa-solid fa-moon text-indigo-500 text-lg';
+    }
+
+    function initTheme() {
+      const savedTheme = localStorage.getItem('focustask_theme');
+      if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+      syncThemeIcon();
+    }
+
+    function toggleTheme() {
+      const isDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('focustask_theme', isDark ? 'dark' : 'light');
+      syncThemeIcon();
+      showToast(isDark ? "Switched to Dark Mode 🌙" : "Switched to Light Mode ☀️");
+    }
+
+    function formatDueDate(dateTimeString) {
+      if (!dateTimeString) return { label: 'No due date', color: 'text-slate-400', isOverdue: false };
+
+      const due = new Date(dateTimeString);
+      const now = new Date();
+      const isOverdue = due < now;
+      const isToday = due.toDateString() === now.toDateString();
+      const timeStr = due.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+      if (isToday) {
+        return {
+          label: 'Today at ' + timeStr,
+          color: isOverdue ? 'text-rose-600 dark:text-rose-400 font-semibold' : 'text-amber-600 dark:text-amber-400 font-medium',
+          isOverdue
+        };
+      } else {
+        const dateStr = due.toLocaleDateString([], { month: 'short', day: 'numeric' });
+        return {
+          label: dateStr + ' at ' + timeStr,
+          color: isOverdue ? 'text-rose-600 dark:text-rose-400 font-semibold' : 'text-slate-500 dark:text-slate-400',
+          isOverdue
+        };
+      }
+    }
+
+    function getPriorityBadgeHtml(priority) {
+      if (priority === 'high') {
+        return '<span class="inline-flex items-center gap-1 text-[11px] font-semibold bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-800/60 px-2 py-0.5 rounded-md"><i class="fa-solid fa-circle text-[6px]"></i> High</span>';
+      } else if (priority === 'medium') {
+        return '<span class="inline-flex items-center gap-1 text-[11px] font-semibold bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 border border-amber-200 dark:border-amber-800/60 px-2 py-0.5 rounded-md"><i class="fa-solid fa-circle text-[6px]"></i> Medium</span>';
+      }
+      return '<span class="inline-flex items-center gap-1 text-[11px] font-semibold bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-600 px-2 py-0.5 rounded-md"><i class="fa-solid fa-circle text-[6px]"></i> Low</span>';
+    }
+
+    function getCategoryBadgeHtml(category) {
+      const map = {
+        academic: '<span class="inline-flex items-center gap-1 text-[11px] font-semibold bg-indigo-50 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800/60 px-2 py-0.5 rounded-md"><i class="fa-solid fa-graduation-cap"></i> Academic</span>',
+        personal: '<span class="inline-flex items-center gap-1 text-[11px] font-semibold bg-teal-50 dark:bg-teal-950/80 text-teal-600 dark:text-teal-400 border border-teal-200 dark:border-teal-800/60 px-2 py-0.5 rounded-md"><i class="fa-solid fa-user"></i> Personal</span>',
+        exam: '<span class="inline-flex items-center gap-1 text-[11px] font-semibold bg-rose-50 dark:bg-rose-950/80 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-800/60 px-2 py-0.5 rounded-md"><i class="fa-solid fa-file-pen"></i> Exam Prep</span>',
+        project: '<span class="inline-flex items-center gap-1 text-[11px] font-semibold bg-amber-50 dark:bg-amber-950/80 text-amber-600 dark:text-amber-400 border border-amber-200 dark:border-amber-800/60 px-2 py-0.5 rounded-md"><i class="fa-solid fa-diagram-project"></i> Project</span>',
+        health: '<span class="inline-flex items-center gap-1 text-[11px] font-semibold bg-emerald-50 dark:bg-emerald-950/80 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/60 px-2 py-0.5 rounded-md"><i class="fa-solid fa-heart-pulse"></i> Health</span>'
+      };
+      return map[category] || map['academic'];
+    }
+
+    function getCategoryAccentColor(category) {
+      const colors = {
+        academic: 'bg-indigo-500',
+        personal: 'bg-teal-500',
+        exam: 'bg-rose-500',
+        project: 'bg-amber-500',
+        health: 'bg-emerald-500'
+      };
+      return colors[category] || 'bg-indigo-500';
+    }
+
+    function getFilteredAndSortedTasks() {
+      const now = new Date();
+      return tasks.filter(task => {
+        if (searchQuery.trim() !== '') {
+          const q = searchQuery.toLowerCase();
+          const matchTitle = task.title.toLowerCase().includes(q);
+          const matchDesc = task.description ? task.description.toLowerCase().includes(q) : false;
+          const matchTag = task.tag ? task.tag.toLowerCase().includes(q) : false;
+          if (!matchTitle && !matchDesc && !matchTag) return false;
+        }
+
+        if (activeFilter === 'academic') return task.category === 'academic';
+        if (activeFilter === 'personal') return task.category === 'personal';
+        if (activeFilter === 'exam') return task.category === 'exam';
+        if (activeFilter === 'project') return task.category === 'project';
+        if (activeFilter === 'health') return task.category === 'health';
+        if (activeFilter === 'active') return !task.completed;
+        if (activeFilter === 'completed') return task.completed;
+        if (activeFilter === 'overdue') return !task.completed && task.dueDate && new Date(task.dueDate) < now;
+
+        return true;
+      }).sort((a, b) => {
+        if (sortBy === 'dueDateAsc') {
+          if (!a.dueDate) return 1;
+          if (!b.dueDate) return -1;
+          return new Date(a.dueDate) - new Date(b.dueDate);
+        } else if (sortBy === 'dueDateDesc') {
+          if (!a.dueDate) return 1;
+          if (!b.dueDate) return -1;
+          return new Date(b.dueDate) - new Date(a.dueDate);
+        } else if (sortBy === 'priorityDesc') {
+          const pMap = { high: 3, medium: 2, low: 1 };
+          return pMap[b.priority] - pMap[a.priority];
+        } else if (sortBy === 'createdDesc') {
+          return new Date(b.createdAt) - new Date(a.createdAt);
+        } else if (sortBy === 'alphabetical') {
+          return a.title.localeCompare(b.title);
+        }
+        return 0;
+      });
+    }
+
+    function renderApp() {
+      updateDashboardStats();
+      renderCategoryTabBadges();
+      renderTaskList();
+      updateDateDisplay();
+    }
+
+    function updateDateDisplay() {
+      const badge = document.getElementById('currentDateBadge');
+      if (badge) {
+        const options = { weekday: 'short', month: 'short', day: 'numeric' };
+        badge.textContent = 'Today • ' + new Date().toLocaleDateString(undefined, options);
+      }
+    }
+
+    function updateDashboardStats() {
+      const total = tasks.length;
+      const completedCount = tasks.filter(t => t.completed).length;
+      const pendingCount = total - completedCount;
+      const percentage = total > 0 ? Math.round((completedCount / total) * 100) : 0;
+
+      const now = new Date();
+      const overdueCount = tasks.filter(t => !t.completed && t.dueDate && new Date(t.dueDate) < now).length;
+
+      document.getElementById('statTotalCount').textContent = total;
+      document.getElementById('statCompletedCount').textContent = completedCount;
+      document.getElementById('statPendingCount').textContent = pendingCount;
+      document.getElementById('statOverdueCount').textContent = overdueCount;
+      document.getElementById('completionPercentageText').textContent = percentage + '%';
+      document.getElementById('progressRatioText').textContent = completedCount + ' of ' + total + ' tasks completed';
+      document.getElementById('pendingRatioText').textContent = pendingCount + ' pending';
+      
+      const progressBar = document.getElementById('mainProgressBar');
+      progressBar.style.width = percentage + '%';
+
+      const subtitle = document.getElementById('motivationalSubtitle');
+      if (percentage === 100 && total > 0) {
+        subtitle.textContent = "🎉 Outstanding! You've completed all tasks!";
+      } else if (percentage >= 70) {
+        subtitle.textContent = "🚀 High momentum! Keep going!";
+      } else if (percentage >= 30) {
+        subtitle.textContent = "⚡ Solid pace! Making good headway.";
+      } else {
+        subtitle.textContent = "Ready to tackle your academic goals?";
+      }
+    }
+
+    function renderCategoryTabBadges() {
+      const now = new Date();
+      document.getElementById('badgeAll').textContent = tasks.length;
+      document.getElementById('badgeActive').textContent = tasks.filter(t => !t.completed).length;
+      document.getElementById('badgeCompleted').textContent = tasks.filter(t => t.completed).length;
+      document.getElementById('badgeOverdue').textContent = tasks.filter(t => !t.completed && t.dueDate && new Date(t.dueDate) < now).length;
+      document.getElementById('badgeAcademic').textContent = tasks.filter(t => t.category === 'academic').length;
+      document.getElementById('badgePersonal').textContent = tasks.filter(t => t.category === 'personal').length;
+      document.getElementById('badgeExam').textContent = tasks.filter(t => t.category === 'exam').length;
+      document.getElementById('badgeProject').textContent = tasks.filter(t => t.category === 'project').length;
+      document.getElementById('badgeHealth').textContent = tasks.filter(t => t.category === 'health').length;
+    }
+
+    function renderTaskList() {
+      const container = document.getElementById('taskListContainer');
+      const emptyState = document.getElementById('emptyState');
+      const visibleTasks = getFilteredAndSortedTasks();
+
+      document.getElementById('visibleTaskCountBadge').textContent = visibleTasks.length + ' items';
+
+      if (visibleTasks.length === 0) {
+        container.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+
+      container.innerHTML = visibleTasks.map(task => {
+        const dateInfo = formatDueDate(task.dueDate);
+        const hasSubtasks = task.subtasks && task.subtasks.length > 0;
+        const completedSubtasks = hasSubtasks ? task.subtasks.filter(s => s.completed).length : 0;
+        const subtaskRatio = hasSubtasks ? Math.round((completedSubtasks / task.subtasks.length) * 100) : 0;
+
+        const subtaskHtml = hasSubtasks ? 
+          '<div class="mt-3 pt-2.5 border-t border-slate-100 dark:border-slate-700/50">' +
+            '<div class="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 mb-1.5 font-medium">' +
+              '<span>Subtasks checklist (' + completedSubtasks + '/' + task.subtasks.length + ')</span>' +
+              '<span>' + subtaskRatio + '%</span>' +
+            '</div>' +
+            '<div class="w-full bg-slate-100 dark:bg-slate-700/50 rounded-full h-1.5 mb-2 overflow-hidden">' +
+              '<div class="bg-indigo-500 h-full transition-all duration-300" style="width: ' + subtaskRatio + '%"></div>' +
+            '</div>' +
+            '<div class="space-y-1.5 mt-2">' +
+              task.subtasks.map(sub => 
+                '<label class="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-300 cursor-pointer hover:text-slate-900 dark:hover:text-white">' +
+                  '<input type="checkbox" ' + (sub.completed ? 'checked' : '') + ' onchange="toggleSubtask(\'' + task.id + '\', \'' + sub.id + '\')" class="rounded text-indigo-600 focus:ring-indigo-500 border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900">' +
+                  '<span class="' + (sub.completed ? 'line-through text-slate-400 dark:text-slate-500' : '') + '">' + escapeHtml(sub.text) + '</span>' +
+                '</label>'
+              ).join('') +
+            '</div>' +
+          '</div>' : '';
+
+        const descHtml = task.description ? 
+          '<p class="text-xs text-slate-500 dark:text-slate-400 mt-1 line-clamp-2">' + escapeHtml(task.description) + '</p>' : '';
+
+        const overdueBadge = (dateInfo.isOverdue && !task.completed) ? 
+          '<span class="bg-rose-100 dark:bg-rose-950/80 text-rose-600 dark:text-rose-400 px-1.5 py-0.2 rounded text-[10px] font-bold uppercase">Overdue</span>' : '';
+
+        return '<div id="card-' + task.id + '" class="task-card group rounded-2xl p-4 sm:p-5 border ' + (task.completed ? 'border-slate-100 dark:border-slate-800/60 opacity-75' : 'border-slate-200/80 dark:border-slate-700/80') + ' shadow-card hover:shadow-lg transition-all relative overflow-hidden text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800">' +
+            '<div class="absolute left-0 top-0 bottom-0 w-1.5 ' + getCategoryAccentColor(task.category) + '"></div>' +
+            '<div class="flex items-start gap-3 sm:gap-4">' +
+              '<button onclick="toggleTaskComplete(\'' + task.id + '\')" title="' + (task.completed ? 'Mark as incomplete' : 'Mark as complete') + '" class="mt-1 flex-shrink-0 w-6 h-6 rounded-lg border-2 ' + (task.completed ? 'bg-emerald-500 border-emerald-500 text-white' : 'border-slate-300 dark:border-slate-600 hover:border-indigo-500 text-transparent') + ' flex items-center justify-center transition-all focus:outline-none">' +
+                '<i class="fa-solid fa-check text-xs"></i>' +
+              '</button>' +
+              '<div class="flex-1 min-w-0">' +
+                '<div class="flex flex-wrap items-center gap-2 mb-1.5">' +
+                  getCategoryBadgeHtml(task.category) +
+                  getPriorityBadgeHtml(task.priority) +
+                  '<span class="text-[11px] font-semibold bg-slate-100 dark:bg-slate-700/60 text-slate-600 dark:text-slate-300 px-2 py-0.5 rounded-md">' +
+                    '🏷️ ' + escapeHtml(task.tag || 'General') +
+                  '</span>' +
+                '</div>' +
+                '<h4 class="text-base font-bold ' + (task.completed ? 'line-through text-slate-400 dark:text-slate-500' : 'text-slate-800 dark:text-slate-100') + ' transition-all">' +
+                  escapeHtml(task.title) +
+                '</h4>' +
+                descHtml +
+                subtaskHtml +
+                '<div class="flex items-center justify-between gap-2 mt-3 pt-2 border-t border-slate-50 dark:border-slate-700/40 text-xs">' +
+                  '<div class="flex items-center gap-1.5 ' + dateInfo.color + '">' +
+                    '<i class="fa-regular fa-clock"></i>' +
+                    '<span>' + dateInfo.label + '</span>' +
+                    overdueBadge +
+                  '</div>' +
+                  '<div class="flex items-center gap-1 opacity-90 group-hover:opacity-100 transition-opacity">' +
+                    '<button onclick="openEditModal(\'' + task.id + '\')" class="p-1.5 text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors" title="Edit Task">' +
+                      '<i class="fa-solid fa-pen-to-square text-xs"></i>' +
+                    '</button>' +
+                    '<button onclick="deleteTask(\'' + task.id + '\')" class="p-1.5 text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors" title="Delete Task">' +
+                      '<i class="fa-solid fa-trash-can text-xs"></i>' +
+                    '</button>' +
+                  '</div>' +
+                '</div>' +
+              '</div>' +
+            '</div>' +
+          '</div>';
+      }).join('');
+    }
+
+    function escapeHtml(str) {
+      if (str === null || str === undefined) return '';
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function toggleTaskComplete(id) {
+      const task = tasks.find(t => t.id === id);
+      if (task) {
+        task.completed = !task.completed;
+        saveTasks();
+        showToast(task.completed ? "Task completed! 🎉" : "Task marked incomplete");
+      }
+    }
+
+    function toggleSubtask(taskId, subtaskId) {
+      const task = tasks.find(t => t.id === taskId);
+      if (task && task.subtasks) {
+        const sub = task.subtasks.find(s => s.id === subtaskId);
+        if (sub) {
+          sub.completed = !sub.completed;
+          saveTasks();
+        }
+      }
+    }
+
+    function deleteTask(id) {
+      const index = tasks.findIndex(t => t.id === id);
+      if (index !== -1) {
+        lastDeletedTask = { task: tasks[index], index };
+        tasks.splice(index, 1);
+        saveTasks();
+
+        showToast("Task deleted", "undo", () => {
+          if (lastDeletedTask) {
+            tasks.splice(lastDeletedTask.index, 0, lastDeletedTask.task);
+            saveTasks();
+            lastDeletedTask = null;
+            showToast("Restored deleted task!");
+          }
+        });
+      }
+    }
+
+    function addPresetTask(type) {
+      const presets = {
+        assignment: {
+          title: "Submit Class Assignment",
+          category: "academic",
+          tag: "General",
+          priority: "high",
+          description: "Upload assignment doc before midnight portal deadline."
+        },
+        revise: {
+          title: "Revise Chapter Notes",
+          category: "academic",
+          tag: "Literature",
+          priority: "medium",
+          description: "Review key bullet points and core terms."
+        },
+        project: {
+          title: "Group Project Sprint",
+          category: "project",
+          tag: "CS",
+          priority: "medium",
+          description: "Coordinate tasks with team members and push code updates."
+        },
+        pastpapers: {
+          title: "Practice Past Papers",
+          category: "exam",
+          tag: "Science",
+          priority: "high",
+          description: "Solve past exam papers under timed conditions."
+        },
+        workout: {
+          title: "30-min Workout",
+          category: "health",
+          tag: "Health",
+          priority: "low",
+          description: "30 mins exercise & hydration routine."
+        }
+      };
+
+      const template = presets[type];
+      if (!template) return;
+
+      openAddModal();
+      document.getElementById('taskTitle').value = template.title;
+      document.getElementById('taskCategory').value = template.category;
+      document.getElementById('taskTag').value = template.tag;
+      document.getElementById('taskPriority').value = template.priority;
+      document.getElementById('taskDescription').value = template.description;
+    }
+
+    function openAddModal() {
+      document.getElementById('editingTaskId').value = '';
+      document.getElementById('modalTitle').innerHTML = '<i class="fa-solid fa-circle-plus text-indigo-500"></i> Create New Task';
+      document.getElementById('taskForm').reset();
+      
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      tomorrow.setHours(17, 0, 0, 0);
+      document.getElementById('taskDueDate').value = tomorrow.toISOString().slice(0, 16);
+
+      modalSubtasks = [];
+      renderModalSubtaskList();
+
+      const modal = document.getElementById('taskModal');
+      modal.classList.remove('opacity-0', 'pointer-events-none');
+      modal.querySelector('div').classList.remove('scale-95');
+    }
+
+    function openEditModal(id) {
+      const task = tasks.find(t => t.id === id);
+      if (!task) return;
+
+      document.getElementById('editingTaskId').value = task.id;
+      document.getElementById('modalTitle').innerHTML = '<i class="fa-solid fa-pen-to-square text-indigo-500"></i> Edit Task';
+      document.getElementById('taskTitle').value = task.title;
+      document.getElementById('taskDescription').value = task.description || '';
+      document.getElementById('taskCategory').value = task.category || 'academic';
+      document.getElementById('taskPriority').value = task.priority || 'medium';
+      document.getElementById('taskTag').value = task.tag || 'General';
+      document.getElementById('taskDueDate').value = task.dueDate || '';
+
+      modalSubtasks = task.subtasks ? JSON.parse(JSON.stringify(task.subtasks)) : [];
+      renderModalSubtaskList();
+
+      const modal = document.getElementById('taskModal');
+      modal.classList.remove('opacity-0', 'pointer-events-none');
+      modal.querySelector('div').classList.remove('scale-95');
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('taskModal');
+      modal.classList.add('opacity-0', 'pointer-events-none');
+      modal.querySelector('div').classList.add('scale-95');
+    }
+
+    function addModalSubtask() {
+      const input = document.getElementById('subtaskInput');
+      const text = input.value.trim();
+      if (text) {
+        modalSubtasks.push({
+          id: 'sub-' + Date.now() + '-' + Math.random().toString(36).substring(2, 6),
+          text: text,
+          completed: false
+        });
+        input.value = '';
+        renderModalSubtaskList();
+      }
+    }
+
+    function removeModalSubtask(subId) {
+      modalSubtasks = modalSubtasks.filter(s => s.id !== subId);
+      renderModalSubtaskList();
+    }
+
+    function renderModalSubtaskList() {
+      const list = document.getElementById('modalSubtaskList');
+      list.innerHTML = modalSubtasks.map(s => 
+        '<li class="flex items-center justify-between bg-slate-100 dark:bg-slate-900 px-3 py-1.5 rounded-lg text-xs">' +
+          '<span class="text-slate-700 dark:text-slate-300">' + escapeHtml(s.text) + '</span>' +
+          '<button type="button" onclick="removeModalSubtask(\'' + s.id + '\')" class="text-slate-400 hover:text-rose-500">' +
+            '<i class="fa-solid fa-xmark"></i>' +
+          '</button>' +
+        '</li>'
+      ).join('');
+    }
+
+    function handleTaskFormSubmit(e) {
+      e.preventDefault();
+
+      const editingId = document.getElementById('editingTaskId').value;
+      const title = document.getElementById('taskTitle').value.trim();
+      const description = document.getElementById('taskDescription').value.trim();
+      const category = document.getElementById('taskCategory').value;
+      const priority = document.getElementById('taskPriority').value;
+      const tag = document.getElementById('taskTag').value;
+      const dueDate = document.getElementById('taskDueDate').value;
+
+      if (!title) return;
+
+      if (editingId) {
+        const task = tasks.find(t => t.id === editingId);
+        if (task) {
+          task.title = title;
+          task.description = description;
+          task.category = category;
+          task.priority = priority;
+          task.tag = tag;
+          task.dueDate = dueDate;
+          task.subtasks = [...modalSubtasks];
+          showToast("Task updated successfully!");
+        }
+      } else {
+        const newTask = {
+          id: 'ft-' + Date.now(),
+          title,
+          description,
+          category,
+          priority,
+          tag,
+          dueDate,
+          completed: false,
+          createdAt: new Date().toISOString(),
+          subtasks: [...modalSubtasks]
+        };
+        tasks.unshift(newTask);
+        showToast("New task created!");
+      }
+
+      saveTasks();
+      closeModal();
+    }
+
+    function showToast(message, actionType, actionCallback) {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = 'pointer-events-auto bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 px-4 py-3 rounded-xl shadow-xl flex items-center justify-between gap-3 text-xs border border-slate-800 dark:border-slate-200 transform translate-y-4 opacity-0 transition-all duration-300';
+
+      let content = '<span>' + escapeHtml(message) + '</span>';
+      if (actionType === 'undo' && actionCallback) {
+        content += '<button id="undoBtn" class="ml-2 font-bold text-amber-400 dark:text-amber-600 underline hover:opacity-80">Undo</button>';
+      }
+
+      toast.innerHTML = content;
+      container.appendChild(toast);
+
+      requestAnimationFrame(() => {
+        toast.classList.remove('translate-y-4', 'opacity-0');
+      });
+
+      if (actionType === 'undo' && actionCallback) {
+        const undoBtn = toast.querySelector('#undoBtn');
+        if (undoBtn) {
+          undoBtn.addEventListener('click', () => {
+            actionCallback();
+            toast.remove();
+          });
+        }
+      }
+
+      setTimeout(() => {
+        if (toast.parentNode) {
+          toast.classList.add('opacity-0', 'translate-y-2');
+          setTimeout(() => toast.remove(), 300);
+        }
+      }, 4000);
+    }
+
+    function exportTasksToJson() {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(tasks, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", 'FocusTask_Backup_' + new Date().toISOString().slice(0,10) + '.json');
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+      showToast("Exported FocusTask JSON backup!");
+    }
+
+    function importTasksFromJson(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        try {
+          const imported = JSON.parse(event.target.result);
+          if (Array.isArray(imported)) {
+            tasks = imported;
+            saveTasks();
+            showToast("Successfully imported FocusTask backup!");
+          } else {
+            showToast("Invalid JSON file structure!");
+          }
+        } catch (err) {
+          showToast("Failed to parse JSON file!");
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function clearCompletedTasks() {
+      const count = tasks.filter(t => t.completed).length;
+      if (count === 0) {
+        showToast("No completed tasks to clear!");
+        return;
+      }
+      tasks = tasks.filter(t => !t.completed);
+      saveTasks();
+      showToast("Cleared " + count + " completed task(s)!");
+    }
+
+    function resetToDemoData() {
+      tasks = JSON.parse(JSON.stringify(SAMPLE_TASKS));
+      saveTasks();
+      showToast("Reset to FocusTask student sample!");
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initTheme();
+      loadTasks();
+      renderApp();
+
+      document.getElementById('themeToggleBtn').addEventListener('click', toggleTheme);
+      document.getElementById('openAddTaskModalBtn').addEventListener('click', openAddModal);
+      document.getElementById('closeModalBtn').addEventListener('click', closeModal);
+      document.getElementById('cancelModalBtn').addEventListener('click', closeModal);
+      document.getElementById('taskForm').addEventListener('submit', handleTaskFormSubmit);
+      document.getElementById('addSubtaskBtn').addEventListener('click', addModalSubtask);
+      document.getElementById('subtaskInput').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          addModalSubtask();
+        }
+      });
+
+      const handleSearch = (e) => {
+        searchQuery = e.target.value;
+        renderTaskList();
+      };
+      document.getElementById('searchInput').addEventListener('input', handleSearch);
+      document.getElementById('mobileSearchInput').addEventListener('input', handleSearch);
+
+      document.getElementById('sortBySelect').addEventListener('change', (e) => {
+        sortBy = e.target.value;
+        renderTaskList();
+      });
+
+      document.querySelectorAll('#categoryTabs .tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('#categoryTabs .tab-btn').forEach(b => {
+            b.classList.remove('bg-indigo-50', 'dark:bg-indigo-950/60', 'text-indigo-600', 'dark:text-indigo-400');
+            b.classList.add('text-slate-600', 'dark:text-slate-300');
+          });
+
+          btn.classList.add('bg-indigo-50', 'dark:bg-indigo-950/60', 'text-indigo-600', 'dark:text-indigo-400');
+          btn.classList.remove('text-slate-600', 'dark:text-slate-300');
+
+          activeFilter = btn.getAttribute('data-filter');
+          
+          const titleMap = {
+            'all': 'All Tasks',
+            'active': '⏳ Active / Pending Tasks',
+            'completed': '✅ Completed Tasks',
+            'overdue': '⏰ Overdue Tasks',
+            'academic': '🎓 Academic Tasks',
+            'personal': '🌿 Personal Tasks',
+            'exam': '📝 Exam Prep Tasks',
+            'project': '💻 Project Tasks',
+            'health': '🏃 Health Tasks'
+          };
+          document.getElementById('currentFilterTitle').innerHTML = titleMap[activeFilter] || 'Tasks';
+
+          renderTaskList();
+        });
+      });
+
+      const menuBtn = document.getElementById('menuDataBtn');
+      const dataMenu = document.getElementById('dataMenu');
+      menuBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dataMenu.classList.toggle('hidden');
+      });
+
+      document.addEventListener('click', () => {
+        if (!dataMenu.classList.contains('hidden')) {
+          dataMenu.classList.add('hidden');
+        }
+      });
+
+      document.getElementById('exportTasksBtn').addEventListener('click', exportTasksToJson);
+      document.getElementById('importFileInput').addEventListener('change', importTasksFromJson);
+      document.getElementById('clearCompletedBtn').addEventListener('click', clearCompletedTasks);
+      document.getElementById('resetDemoBtn').addEventListener('click', resetToDemoData);
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeModal();
+      });
+    });
+  </script>
+</body>
+</html>
